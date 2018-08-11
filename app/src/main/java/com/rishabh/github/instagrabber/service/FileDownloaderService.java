@@ -12,8 +12,13 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.os.ResultReceiver;
+
 import com.rishabh.github.instagrabber.database.DBController;
 import com.rishabh.github.instagrabber.database.InstaImage;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,9 +28,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.net.ssl.HttpsURLConnection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 public class FileDownloaderService extends IntentService
 {
@@ -229,14 +233,24 @@ public class FileDownloaderService extends IntentService
     // true is for video and false is image
 
     //for caption
-    int indexcaption = html.indexOf("edge_media_to_caption");
-    indexcaption += 48;
+//    int indexcaption = html.indexOf("edge_media_to_caption");
+//    indexcaption += 48;
+//
+//    int startCaption = html.indexOf("\"", indexcaption);
+//    startCaption += 1;
+//    int endCaption = html.indexOf("\"", startCaption);
+//
+//    strCaption = html.substring(startCaption, endCaption);
+//      instaImage.set_caption(strCaption);
+      //for caption
+      int indexcaption = html.indexOf("\"caption\"");
+      indexcaption += 9;
 
-    int startCaption = html.indexOf("\"", indexcaption);
-    startCaption += 1;
-    int endCaption = html.indexOf("\"", startCaption);
+      int startCaption = html.indexOf("\"", indexcaption);
+      startCaption += 1;
+      int endCaption = html.indexOf("\"", startCaption);
 
-    strCaption = html.substring(startCaption, endCaption);
+      strCaption = html.substring(startCaption, endCaption);
       instaImage.set_caption(strCaption);
 
       return downloadURL;

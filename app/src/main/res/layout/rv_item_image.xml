@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="12dp"
+        android:layout_margin="0dp"
         >
       <LinearLayout
           android:layout_width="match_parent"
@@ -60,10 +60,10 @@
 
         <io.github.rockerhieu.emojicon.EmojiconTextView
             android:id="@+id/tvCaption"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
             android:layout_weight="10"
-            android:text="lorum aefaf aefai fae faoieuf aeof asadfafmasfiamsofmaofmaaasfckasflaniifoaoaridhabh asidnad anwid aniwd naiw dnai dna nda a"
+            android:text="testlasdf"
             emojicon:emojiconAlignment="baseline"
             android:paddingBottom="4dp"
             android:ellipsize="end"
@@ -74,9 +74,9 @@
 
         <ImageView
             android:id="@+id/ivsettings"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="15dp"
             android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
             android:src="@drawable/ic_settings"
             />
 
@@ -85,15 +85,14 @@
 
       <LinearLayout
           android:layout_width="match_parent"
-          android:layout_height="0dp"
-          android:layout_weight="1"
+          android:layout_height="20dp"
           android:orientation="horizontal"
           >
 
         <TextView
             android:text="REPOST"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:id="@+id/tvRepost"
             android:layout_weight="2"
             android:gravity="right"
@@ -105,7 +104,7 @@
             />
         <TextView
             android:text="DELETE"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:id="@+id/tvDelete"
             android:layout_weight="1"
