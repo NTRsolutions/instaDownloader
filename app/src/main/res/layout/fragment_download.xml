@@ -82,7 +82,7 @@
 
     </LinearLayout>
   <TextView
-      android:text="File Saved To InstantInsta/download"
+      android:text="File Saved To /InstantInsta"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:id="@+id/textView3"
@@ -175,17 +175,6 @@
                  android:textColor="#ff0004"
                  android:visibility="gone"
                  />
-
-             <!--<TextView-->
-                 <!--android:text="1 task left"-->
-                 <!--android:layout_width="wrap_content"-->
-                 <!--android:layout_height="wrap_content"-->
-                 <!--android:textSize="14dp"-->
-                 <!--android:textColor="#FFFF00"-->
-                 <!--android:layout_gravity="center"-->
-                 <!--android:visibility="gone"-->
-                 <!--android:id="@+id/tv_task"-->
-                 <!--/>-->
 
 
            </LinearLayout>

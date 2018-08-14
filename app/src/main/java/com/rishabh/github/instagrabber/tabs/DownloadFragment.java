@@ -27,7 +27,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.os.ResultReceiver;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +50,7 @@ import com.rishabh.github.instagrabber.database.InstaImage;
 import com.rishabh.github.instagrabber.service.DownloadService;
 import com.rishabh.github.instagrabber.service.FileDownloaderService;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -208,9 +208,7 @@ public class DownloadFragment extends Fragment {
         cvdownloadView = (CardView) rootView.findViewById(R.id.cv_downloadView);
         cvGuide = (CardView) rootView.findViewById(R.id.cvGuide);
 
-
         llDownloadLayout = (LinearLayout) rootView.findViewById(R.id.llDownloadLayout);
-
         mContext.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         Intent intent = new Intent(mContext, DownloadService.class);
         mContext.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -224,9 +222,11 @@ public class DownloadFragment extends Fragment {
 
                 if (isGuideVisible) {
                     cvGuide.setVisibility(View.GONE);
+                    cvdownloadView.setVisibility(View.VISIBLE);
                     isGuideVisible = false;
                 } else {
                     cvGuide.setVisibility(View.VISIBLE);
+                    cvdownloadView.setVisibility(View.GONE);
                     isGuideVisible = true;
                 }
             }
@@ -243,7 +243,8 @@ public class DownloadFragment extends Fragment {
         btnCheckURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                cvGuide.setVisibility(View.GONE);
+                isGuideVisible = false;
                 //todo check using reg exp whether the url is correct
                 new ValidateFileFromURL().execute(etURL.getText().toString());
 
@@ -281,7 +282,7 @@ public class DownloadFragment extends Fragment {
                     Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
                     ((MainActivity) activity).viewPager.setCurrentItem(1, true);
                 }
-                new DownloadFileFromURL().execute(etURL.getText().toString());
+//                new DownloadFileFromURL().execute(etURL.getText().toString());
             }
         });
 
@@ -294,33 +295,34 @@ public class DownloadFragment extends Fragment {
 
 
         final ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
-                                                    public void onPrimaryClipChanged() {
-                                                        String a = clipboard.getText().toString();
-                                                        Toast.makeText(mContext, "Copy:\n" + a, Toast.LENGTH_LONG).show();
+        clipboard.addPrimaryClipChangedListener(
+                new ClipboardManager.OnPrimaryClipChangedListener() {
+                    public void onPrimaryClipChanged() {
+                        String a = clipboard.getText().toString();
+                        Toast.makeText(mContext, "Copy:\n" + a, Toast.LENGTH_LONG).show();
 
-                                                        //if(mPreviousText.equals(a)) {
-                                                        //	return;
-                                                        //}else {
+                        //if(mPreviousText.equals(a)) {
+                        //	return;
+                        //}else {
 
-                                                        //File direct = new File(Environment.getExternalStorageDirectory() + "/InstantInsta.mp4");
+                        //File direct = new File(Environment.getExternalStorageDirectory() + "/InstantInsta.mp4");
 
-                                                        if (!dbcon.isURLPresent(a)) {
+                        if (!dbcon.isURLPresent(a)) {
 
-                                                            if (checkURL(a)) {
-                                                                Handler handler = new Handler();
-                                                                imageDownloadReceiver imageDownloadReceiver = new imageDownloadReceiver(handler);
-                                                                FileDownloaderService.startAction(mContext, a, imageDownloadReceiver);
-                                                                //mService.downloadAsynFile(a);
-                                                                //mPreviousText = a;
-                                                            }
-                                                        } else {
-                                                            Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
-                                                            ((MainActivity) activity).viewPager.setCurrentItem(1, true);
-                                                        }
-                                                        //}
-                                                    }
-                                                }
+                            if (checkURL(a)) {
+                                Handler handler = new Handler();
+                                imageDownloadReceiver imageDownloadReceiver = new imageDownloadReceiver(handler);
+                                FileDownloaderService.startAction(mContext, a, imageDownloadReceiver);
+                                //mService.downloadAsynFile(a);
+                                //mPreviousText = a;
+                            }
+                        } else {
+                            Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
+                            ((MainActivity) activity).viewPager.setCurrentItem(1, true);
+                        }
+                        //}
+                    }
+                }
         );
 
         return rootView;
@@ -443,7 +445,8 @@ public class DownloadFragment extends Fragment {
 
                         }
 
-                        tvCaption.setText(Html.fromHtml(caption + ""));
+//                        tvCaption.setText(Html.fromHtml(caption + ""));
+                        tvCaption.setText(StringEscapeUtils.unescapeJava(caption));
 
                         tvProgress.setVisibility(View.GONE);
                         tvCancel.setVisibility(View.GONE);
@@ -521,19 +524,12 @@ public class DownloadFragment extends Fragment {
                 type = false;
 
                 //for caption
-//                int indexcaption = html.indexOf("edge_media_to_caption");
-//                indexcaption += 48;
-//
-//                int startCaption = html.indexOf("\"", indexcaption);
-//                startCaption += 1;
-//                int endCaption = html.indexOf("\"", startCaption);
-                int indexcaption = html.indexOf("\"caption\"");
-                indexcaption += 9;
+                int indexcaption = html.indexOf("edge_media_to_caption");
+                indexcaption += 48;
 
                 int startCaption = html.indexOf("\"", indexcaption);
                 startCaption += 1;
                 int endCaption = html.indexOf("\"", startCaption);
-
 
                 String strCaption = null;
                 strCaption = html.substring(startCaption, endCaption);
@@ -586,7 +582,7 @@ public class DownloadFragment extends Fragment {
         protected void onProgressUpdate(String... progress) {
 
             if (progress[0] == "0") {
-                tvCaption.setText(Html.fromHtml(progress[1] + ""));
+                tvCaption.setText(StringEscapeUtils.unescapeJava(progress[1]));
                 dismissDialog();
             }
         }
@@ -648,12 +644,6 @@ public class DownloadFragment extends Fragment {
                 urlVid = html.substring(startVid, endVid);
 
                 if (urlVid.equalsIgnoreCase("en")) {
-                    //
-                    //	url = new URL(urlVid);
-                    //	type =false;
-                    //}else {
-                    // for image url
-
                     int index = html.indexOf("display_url");
                     index += 13;
                     int start = html.indexOf("\"", index);
@@ -675,7 +665,7 @@ public class DownloadFragment extends Fragment {
 
                 //for caption
                 int indexcaption = html.indexOf("edge_media_to_caption");
-                indexcaption += 53;
+                indexcaption += 48;
 
                 int startCaption = html.indexOf("\"", indexcaption);
                 startCaption += 1;
@@ -709,12 +699,12 @@ public class DownloadFragment extends Fragment {
 
                 String fileName = null;
                 if (!type) {
-                    fileName = "Insta-"
+                    fileName = "Insta"
                             + simpleDateFormat.format(new Date())
                             + ".jpg";
                 } else {
 
-                    fileName = "Insta-"
+                    fileName = "Insta"
                             + simpleDateFormat.format(new Date())
                             + ".mp4";
                 }

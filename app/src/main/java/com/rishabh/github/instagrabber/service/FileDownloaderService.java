@@ -16,6 +16,7 @@ import android.support.v4.os.ResultReceiver;
 import com.rishabh.github.instagrabber.database.DBController;
 import com.rishabh.github.instagrabber.database.InstaImage;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
@@ -112,7 +113,7 @@ public class FileDownloaderService extends IntentService
       outputFilePath = null;
     } else if (contentType.contains("image")) {
 
-      fileName = "Insta-" + simpleDateFormat.format(new Date()) + ".jpg";
+        fileName = "Insta-m" + simpleDateFormat.format(new Date()) + ".jpg";
       file = new File(direct, fileName);
       if (file.exists()) {
         file.delete();
@@ -124,7 +125,7 @@ public class FileDownloaderService extends IntentService
       //extension = "jpg";
 
     } else {
-      fileName = "Insta-" + simpleDateFormat.format(new Date()) + ".mp4";
+        fileName = "Insta-m" + simpleDateFormat.format(new Date()) + ".mp4";
 
       file = new File(direct, fileName);
       if (file.exists()) {
@@ -233,26 +234,16 @@ public class FileDownloaderService extends IntentService
     // true is for video and false is image
 
     //for caption
-//    int indexcaption = html.indexOf("edge_media_to_caption");
-//    indexcaption += 48;
-//
-//    int startCaption = html.indexOf("\"", indexcaption);
-//    startCaption += 1;
-//    int endCaption = html.indexOf("\"", startCaption);
-//
-//    strCaption = html.substring(startCaption, endCaption);
+        int indexcaption = html.indexOf("edge_media_to_caption");
+        indexcaption += 48;
+
+        int startCaption = html.indexOf("\"", indexcaption);
+        startCaption += 1;
+        int endCaption = html.indexOf("\"", startCaption);
+
+        strCaption = html.substring(startCaption, endCaption);
+        instaImage.set_caption(StringEscapeUtils.unescapeJava(strCaption));
 //      instaImage.set_caption(strCaption);
-      //for caption
-      int indexcaption = html.indexOf("\"caption\"");
-      indexcaption += 9;
-
-      int startCaption = html.indexOf("\"", indexcaption);
-      startCaption += 1;
-      int endCaption = html.indexOf("\"", startCaption);
-
-      strCaption = html.substring(startCaption, endCaption);
-      instaImage.set_caption(strCaption);
-
       return downloadURL;
     } catch (IOException e) {
       e.printStackTrace();

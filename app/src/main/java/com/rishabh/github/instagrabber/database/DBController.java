@@ -4,13 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class DBController {
     // Database fields
     private DBhelper dbHelper;
-    private Context context;
+    //    private Context context;
     private SQLiteDatabase database;
 
     public DBController(Context context) {
@@ -48,6 +51,7 @@ public class DBController {
         }
         InstaImage img = new InstaImage(Integer.parseInt(cursor.getString(0)), cursor.getString(1),
                 cursor.getString(2), cursor.getString(3),cursor.getString(4));
+        cursor.close();
 
         return img;
     }
@@ -60,8 +64,10 @@ public class DBController {
         String selectQuery = "SELECT  * FROM " + DBhelper.TABLE_NAME;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
 
-        return cursor.getCount();
+        return count;
     }
 
     // Getting All Employees
@@ -83,11 +89,14 @@ public class DBController {
                 img.set_name(cursor.getString(1));
                 img.set_instaImageURL(cursor.getString(2));
                 img.set_phoneImageURL(cursor.getString(3));
-                img.set_caption(cursor.getString(4));
+                img.set_caption(StringEscapeUtils.unescapeJava(cursor.getString(4)));
                 // Adding contact to list
                 imageList.add(img);
             } while (cursor.moveToNext());
         }
+
+        Log.d("tuanvn", "" + imageList.size());
+        cursor.close();
 
         // return contact list
         return imageList;
@@ -126,6 +135,7 @@ public class DBController {
                 }
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return flag;
     }
 

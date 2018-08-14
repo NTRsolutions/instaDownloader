@@ -67,7 +67,7 @@
             emojicon:emojiconAlignment="baseline"
             android:paddingBottom="4dp"
             android:ellipsize="end"
-            android:maxLines="3"
+            android:maxLines="4"
             android:textColor="#000000"
             />
 

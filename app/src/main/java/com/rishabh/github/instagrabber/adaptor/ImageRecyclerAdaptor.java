@@ -32,6 +32,8 @@ import com.rishabh.github.instagrabber.WebViewActivity;
 import com.rishabh.github.instagrabber.database.DBController;
 import com.rishabh.github.instagrabber.database.InstaImage;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -60,6 +62,8 @@ public class ImageRecyclerAdaptor extends RecyclerView.Adapter<ImageRecyclerAdap
         //recyclerView =mRecyclerView;
         dbcon = new DBController(mContext);
         imageList = dbcon.getAllInstaImages();
+        imageList.size();
+//        Log.d("tuanvn", "" + imageList.size());
     }
 
     @Override
@@ -126,25 +130,25 @@ public class ImageRecyclerAdaptor extends RecyclerView.Adapter<ImageRecyclerAdap
             //holder.imageView.setImageBitmap(myBitmap);
 
 
-            final boolean isExpanded = position == mExpandedPosition;
-
-            if (isExpanded) {
-                holder.tvCaption.setMaxLines(Integer.MAX_VALUE);
-            } else {
-                holder.tvCaption.setMaxLines(3);
-            }
-
-            holder.tvCaption.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mExpandedPosition = isExpanded ? -1 : position;
-
-                    notifyDataSetChanged();
-                }
-            });
+//            final boolean isExpanded = position == mExpandedPosition;
+//
+//            if (isExpanded) {
+//                holder.tvCaption.setMaxLines(Integer.MAX_VALUE);
+//            } else {
+//                holder.tvCaption.setMaxLines(3);
+//            }
+//
+//            holder.tvCaption.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    mExpandedPosition = isExpanded ? -1 : position;
+//
+//                    notifyDataSetChanged();
+//                }
+//            });
         }
 
-        holder.tvCaption.setText(instaImage.get_caption());
+        holder.tvCaption.setText(StringEscapeUtils.unescapeJava(instaImage.get_caption()));
 
         holder.tvRepost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +157,10 @@ public class ImageRecyclerAdaptor extends RecyclerView.Adapter<ImageRecyclerAdap
                 String postFileName = imageList.get(imageList.size() - 1 - position).get_name();
 
                 Intent instagram = new Intent(android.content.Intent.ACTION_SEND);
-                instagram.setType("image/*");
+                if (postFileName.contains("mp4"))
+                    instagram.setType("video/mp4");
+                else
+                    instagram.setType("image/*");
 
                 instagram.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 File file = new File(Environment.getExternalStorageDirectory().getPath()
