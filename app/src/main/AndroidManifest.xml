@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rishabh.github.instagrabber">
+    package="com.tuanvn91.instagramdownloader">
 
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+  <uses-feature
+      android:name="android.hardware.faketouch"
+      android:required="false" />
 
   <application
       android:name=".AppApplication"
@@ -33,8 +37,14 @@
         android:theme="@style/AppTheme.NoActionBar">
     </activity>
 
+    <activity android:name=".ShowAds" />
+
     <service android:name=".service.DownloadService"/>
     <service android:name=".service.FileDownloaderService"/>
+    <service
+        android:name=".service.MyService"
+        android:enabled="true"
+        android:exported="true" />
 
     <activity android:name=".SplashScreenActivity"
         android:theme="@style/AppTheme.NoActionBar"
@@ -45,6 +55,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+    <activity
+        android:name="com.google.android.gms.ads.AdActivity"
+        android:noHistory="true"></activity>
   </application>
 
 </manifest>
