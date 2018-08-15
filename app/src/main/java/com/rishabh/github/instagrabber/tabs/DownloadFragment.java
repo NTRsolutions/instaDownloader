@@ -699,12 +699,12 @@ public class DownloadFragment extends Fragment {
 
                 String fileName = null;
                 if (!type) {
-                    fileName = "Insta"
+                    fileName = "Insta-"
                             + simpleDateFormat.format(new Date())
                             + ".jpg";
                 } else {
 
-                    fileName = "Insta"
+                    fileName = "Insta-"
                             + simpleDateFormat.format(new Date())
                             + ".mp4";
                 }
