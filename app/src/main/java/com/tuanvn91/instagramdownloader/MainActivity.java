@@ -2,7 +2,6 @@ package com.tuanvn91.instagramdownloader;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,9 +11,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tuanvn91.instagramdownloader.adaptor.TabsPagerAdapter;
@@ -23,6 +25,7 @@ import com.tuanvn91.instagramdownloader.tabs.DownloadFragment;
 import com.tuanvn91.instagramdownloader.tabs.HistoryFragment;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.UUID;
 
 import okhttp3.Callback;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements
     Toolbar toolbar;
     TabLayout tabLayout;
     private TabsPagerAdapter mAdapter;
-    private WebView webView;
+    private InterstitialAd interstitialAd;
     private SharedPreferences mPrefs;
 
     @Override
@@ -46,10 +49,53 @@ public class MainActivity extends AppCompatActivity implements
         initNavDrawerToggel();
         Utilities.getStoragePermission(MainActivity.this);
         getAppConfig();
+
+        interstitialAd = new InterstitialAd(this, "525342907902932_525343574569532");
+        interstitialAd.setAdListener(new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                interstitialAd.loadAd();
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+
+            }
+        });
+
+        interstitialAd.loadAd();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (interstitialAd != null) {
+            interstitialAd.destroy();
+        }
+        super.onDestroy();
     }
 
     private void initNavDrawerToggel() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Initilization
@@ -57,6 +103,26 @@ public class MainActivity extends AppCompatActivity implements
 
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(mAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Random rad = new Random();
+                int i = rad.nextInt(10);
+                if (i < 4 && interstitialAd.isAdLoaded()) {
+                    interstitialAd.show();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Download"));
@@ -85,18 +151,6 @@ public class MainActivity extends AppCompatActivity implements
         if (fragment != null)
             ((HistoryFragment) fragment).refresh();
 
-    }
-
-    private boolean isAppInstalled(String packageName) {
-        PackageManager pm = getPackageManager();
-        boolean installed = false;
-        try {
-            pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-            installed = true;
-        } catch (PackageManager.NameNotFoundException e) {
-            installed = false;
-        }
-        return installed;
     }
 
     @Override
@@ -132,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements
             uuid = mPrefs.getString("uuid", UUID.randomUUID().toString());
         } else {
             uuid = UUID.randomUUID().toString();
-            mPrefs.edit().putString("uuid", "insta" + uuid).commit();
+            mPrefs.edit().putString("uuid", "insta" + uuid).apply();
         }
 
         OkHttpClient client = new OkHttpClient();

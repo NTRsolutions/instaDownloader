@@ -29,7 +29,7 @@
     <ImageView
         android:src="@drawable/imageinsta"
         android:id="@+id/imageView"
-        android:scaleType="fitXY"
+        android:scaleType="fitCenter"
         android:layout_width="92dp"
         android:layout_height="110dp"
         />
@@ -63,11 +63,14 @@
             android:layout_width="wrap_content"
             android:layout_height="80dp"
             android:layout_weight="10"
-            android:text="testlasdf"
+            android:maxLines="3"
             emojicon:emojiconAlignment="baseline"
-            android:paddingBottom="4dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp"
             android:ellipsize="end"
-            android:maxLines="4"
+            android:text="Empty caption"
             android:textColor="#000000"
             />
 

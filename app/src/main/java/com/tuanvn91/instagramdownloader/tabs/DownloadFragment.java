@@ -243,10 +243,17 @@ public class DownloadFragment extends Fragment {
         btnCheckURL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cvGuide.setVisibility(View.GONE);
-                isGuideVisible = false;
-                //todo check using reg exp whether the url is correct
-                new ValidateFileFromURL().execute(etURL.getText().toString());
+                String link = etURL.getText().toString();
+                if (link.equalsIgnoreCase(""))
+                    Toast.makeText(getContext(), "invalid link", Toast.LENGTH_SHORT).show();
+                else {
+                    cvGuide.setVisibility(View.GONE);
+                    isGuideVisible = false;
+                    //todo check using reg exp whether the url is correct
+                    new ValidateFileFromURL().execute(etURL.getText().toString());
+                }
+
+
 
             }
         });
@@ -299,7 +306,7 @@ public class DownloadFragment extends Fragment {
                 new ClipboardManager.OnPrimaryClipChangedListener() {
                     public void onPrimaryClipChanged() {
                         String a = clipboard.getText().toString();
-                        Toast.makeText(mContext, "Copy:\n" + a, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext, "Copied", Toast.LENGTH_SHORT).show();
 
                         //if(mPreviousText.equals(a)) {
                         //	return;

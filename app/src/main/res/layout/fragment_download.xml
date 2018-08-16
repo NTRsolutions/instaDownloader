@@ -237,7 +237,7 @@
 
       <TextView
           android:id="@+id/tvCopy"
-          android:text="COPY ALL"
+          android:text="COPY CAPTION"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="right"
