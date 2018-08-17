@@ -37,7 +37,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import java.io.File;
 import java.util.ArrayList;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
+//import io.github.rockerhieu.emojicon.EmojiconTextView;
 
 /**
  * Created by rishabh on 25/2/17.
@@ -332,7 +332,7 @@ public class ImageRecyclerAdaptor extends RecyclerView.Adapter<ImageRecyclerAdap
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView, ivSettings, ivItemPlay;
         TextView tvRepost, tvDelete;
-        EmojiconTextView tvCaption;
+        TextView tvCaption;
 
         private ItemViewHolder(View itemView) {
             super(itemView);

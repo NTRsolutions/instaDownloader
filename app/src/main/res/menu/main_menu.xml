@@ -5,7 +5,7 @@
   <item
       android:title="Open Instagram"
       android:id="@+id/instalogo"
-    android:icon="@drawable/ic_insta_128"
+      android:icon="@drawable/insta_icon"
       app:showAsAction="ifRoom"
 
       />

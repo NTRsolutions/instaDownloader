@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:custom="http://schemas.android.com/tools"
-    android:layout_marginTop="12dp"
-    >
+    android:layout_marginTop="12dp">
   <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -224,12 +221,13 @@
           android:orientation="vertical"
           android:layout_margin="18dp"
           >
-      <io.github.rockerhieu.emojicon.EmojiconTextView
+
+          <TextView
           android:id="@+id/tv_caption"
           android:text="lorum aefaf aefai fae faoieuf aeof asadfafmasfiamsofmaofmaaasfckasflaniifoaoaridhabh asidnad anwid aniwd naiw dnai dna nda a"
           android:paddingBottom="4dp"
-          emojicon:emojiconAlignment="baseline"
-          android:ellipsize="end"
+
+              android:ellipsize="end"
           android:textColor="#000000"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

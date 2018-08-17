@@ -66,10 +66,10 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.rockerhieu.emojicon.EmojiconTextView;
-
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static com.tuanvn91.instagramdownloader.service.FileDownloaderService.RESPONSE_DOWNLOAD_PROGRESS;
+
+//import io.github.rockerhieu.emojicon.EmojiconTextView;
 
 public class DownloadFragment extends Fragment {
 
@@ -88,7 +88,7 @@ public class DownloadFragment extends Fragment {
     CardView cvdownloadView, cvGuide;
     String mPreviousText = "";
     String pattern = "https://www.instagram.com/p/.";
-    EmojiconTextView tvCaption;
+    TextView tvCaption;
     private FragmentActivity mContext;
     private TextView tvCopy;
     private EditText etURL;
@@ -187,7 +187,7 @@ public class DownloadFragment extends Fragment {
         mContext = getActivity();
 
         circularProgress = (DonutProgress) rootView.findViewById(R.id.donut_progress);
-        tvCaption = (EmojiconTextView) rootView.findViewById(R.id.tv_caption);
+        tvCaption = (TextView) rootView.findViewById(R.id.tv_caption);
 
         btnCheckURL = (Button) rootView.findViewById(R.id.btnCheckURL);
         etURL = (EditText) rootView.findViewById(R.id.edittxturl);

@@ -8,29 +8,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/insta_start"
+    android:background="@color/colorTextPrimary"
     tools:context="com.tuanvn91.instagramdownloader.SplashScreenActivity">
 
 
   <ImageView
-      android:src="@drawable/instabacklogo"
+      android:layout_width="120dp"
       android:id="@+id/imageView4"
-      android:layout_width="350dp"
-      android:layout_height="350dp"
-      android:layout_centerVertical="true"
+      android:layout_height="120dp"
+      android:layout_above="@+id/textView"
+      android:layout_alignParentRight="true"
+      android:layout_centerHorizontal="true"
       android:layout_alignParentLeft="true"
-      android:layout_alignParentStart="true"
+      android:layout_marginBottom="10dp"
+      android:src="@mipmap/icon512_insta"
       />
   <TextView
-      android:text="INSTANT INSTA"
+      android:layout_centerVertical="true"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/imageView4"
+      android:text="Downloader for Instagram"
       android:layout_centerHorizontal="true"
       android:id="@+id/textView"
-      android:textSize="38dp"
-      android:textStyle="bold|italic"
-      android:fontFamily="cursive"
+      android:textSize="25sp"
+      android:textStyle="bold"
       android:textColor="?attr/colorPrimaryDark"
       />
+
+  <TextView
+      android:id="@+id/tv1"
+      android:layout_width="200dp"
+      android:layout_height="wrap_content"
+      android:layout_below="@+id/textView"
+      android:layout_centerHorizontal="true"
+      android:text="@string/tv1"
+      android:textAlignment="center"
+      android:textColor="@color/black"
+      android:textSize="17sp" />
 </RelativeLayout>

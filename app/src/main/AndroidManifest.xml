@@ -13,7 +13,7 @@
   <application
       android:name=".AppApplication"
       android:allowBackup="true"
-      android:icon="@mipmap/ic_launcher"
+      android:icon="@mipmap/icon512_insta"
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
