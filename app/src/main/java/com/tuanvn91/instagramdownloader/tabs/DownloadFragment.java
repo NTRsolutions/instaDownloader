@@ -42,7 +42,12 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.InterstitialAd;
+import com.facebook.ads.InterstitialAdListener;
 import com.github.lzyzsd.circleprogress.DonutProgress;
+import com.kobakei.ratethisapp.RateThisApp;
 import com.tuanvn91.instagramdownloader.MainActivity;
 import com.tuanvn91.instagramdownloader.R;
 import com.tuanvn91.instagramdownloader.database.DBController;
@@ -78,11 +83,12 @@ public class DownloadFragment extends Fragment {
     private final Handler mHandler = new Handler();
     DonutProgress circularProgress;
     Button btnCheckURL, btnPaste, btnguide;
-    ImageView ivImage, ivPlayBtn, ivDel;
+    ImageView ivImage, ivDel;
     FloatingActionButton fabDownload;
     ProgressBar mProgressBar;
     DownloadService mService;
     boolean mBound = false;
+    private InterstitialAd interstitialAd;
     TextView tvProgress, tvCancel;
     LinearLayout llDownloadLayout;
     CardView cvdownloadView, cvGuide;
@@ -176,8 +182,51 @@ public class DownloadFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        interstitialAd = new InterstitialAd(getActivity(), "445705105939811_445705302606458");// ID a Long
+        interstitialAd.setAdListener(new InterstitialAdListener() {
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                interstitialAd.loadAd();
+            }
+
+            @Override
+            public void onError(Ad ad, AdError adError) {
+
+            }
+
+            @Override
+            public void onAdLoaded(Ad ad) {
+
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+
+            }
+        });
+
+        interstitialAd.loadAd();
         Log.i("Tag1", "GamesFrag");
     }
+
+    @Override
+    public void onDestroy() {
+        if (interstitialAd != null) {
+            interstitialAd.destroy();
+        }
+        super.onDestroy();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -196,10 +245,10 @@ public class DownloadFragment extends Fragment {
         btnguide = (Button) rootView.findViewById(R.id.btnguide);
 
         fabDownload = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        ivPlayBtn = (ImageView) rootView.findViewById(R.id.ivPlayBtn);
+//        ivPlayBtn = (ImageView) rootView.findViewById(R.id.ivPlayBtn);
         ivDel = (ImageView) rootView.findViewById(R.id.ivDel);
 
-        ivPlayBtn.setVisibility(View.INVISIBLE);
+//        ivPlayBtn.setVisibility(View.INVISIBLE);
         clipBoard = (ClipboardManager) mContext.getSystemService(CLIPBOARD_SERVICE);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         tvProgress = (TextView) rootView.findViewById(R.id.tvProgress);
@@ -254,7 +303,6 @@ public class DownloadFragment extends Fragment {
                 }
 
 
-
             }
         });
 
@@ -289,7 +337,18 @@ public class DownloadFragment extends Fragment {
                     Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
                     ((MainActivity) activity).viewPager.setCurrentItem(1, true);
                 }
-//                new DownloadFileFromURL().execute(etURL.getText().toString());
+
+                RateThisApp.Config config = new RateThisApp.Config(0, 0);
+                config.setMessage(R.string.rate_5_stars);
+                RateThisApp.init(config);
+                RateThisApp.onCreate(activity);
+                boolean isRate = RateThisApp.showRateDialogIfNeeded(activity);
+                if (!isRate && interstitialAd.isAdLoaded()) {
+
+                    interstitialAd.show();
+
+                }
+
             }
         });
 
@@ -439,10 +498,10 @@ public class DownloadFragment extends Fragment {
                                     .apply(new RequestOptions())
 
                                     .into(ivImage);
-                            ivPlayBtn.setVisibility(View.VISIBLE);
+//                            ivPlayBtn.setVisibility(View.VISIBLE);
                         } else {
 
-                            ivPlayBtn.setVisibility(View.GONE);
+//                            ivPlayBtn.setVisibility(View.GONE);
                             File file = new File(outFilePath);
                             Uri imageUri = Uri.fromFile(file);
 
@@ -599,7 +658,7 @@ public class DownloadFragment extends Fragment {
             dismissDialog();
             ivImage.setImageBitmap(image);
             if (type) {
-                ivPlayBtn.setVisibility(View.VISIBLE);
+//                ivPlayBtn.setVisibility(View.VISIBLE);
             }
         }
 

@@ -65,7 +65,7 @@ public class HistoryFragment extends Fragment implements MainActivity.FragmentRe
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
 
         mContext = getActivity();
-        adView = new AdView(mContext, "525342907902932_525343164569573", AdSize.BANNER_HEIGHT_50);
+        adView = new AdView(mContext, "445705105939811_445706462606342", AdSize.BANNER_HEIGHT_50);//ID a Long
         RelativeLayout relativeLayout = rootView.findViewById(R.id.banner);
         relativeLayout.addView(adView);
         adView.loadAd();

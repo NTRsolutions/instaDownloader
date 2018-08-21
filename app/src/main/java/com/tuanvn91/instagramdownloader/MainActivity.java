@@ -3,6 +3,7 @@ package com.tuanvn91.instagramdownloader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,10 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.InterstitialAd;
-import com.facebook.ads.InterstitialAdListener;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.tuanvn91.instagramdownloader.adaptor.TabsPagerAdapter;
@@ -25,7 +22,6 @@ import com.tuanvn91.instagramdownloader.tabs.DownloadFragment;
 import com.tuanvn91.instagramdownloader.tabs.HistoryFragment;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.UUID;
 
 import okhttp3.Callback;
@@ -39,8 +35,9 @@ public class MainActivity extends AppCompatActivity implements
     Toolbar toolbar;
     TabLayout tabLayout;
     private TabsPagerAdapter mAdapter;
-    private InterstitialAd interstitialAd;
+
     private SharedPreferences mPrefs;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,49 +47,9 @@ public class MainActivity extends AppCompatActivity implements
         Utilities.getStoragePermission(MainActivity.this);
         getAppConfig();
 
-        interstitialAd = new InterstitialAd(this, "525342907902932_525343574569532");
-        interstitialAd.setAdListener(new InterstitialAdListener() {
-            @Override
-            public void onInterstitialDisplayed(Ad ad) {
 
-            }
-
-            @Override
-            public void onInterstitialDismissed(Ad ad) {
-                interstitialAd.loadAd();
-            }
-
-            @Override
-            public void onError(Ad ad, AdError adError) {
-
-            }
-
-            @Override
-            public void onAdLoaded(Ad ad) {
-
-            }
-
-            @Override
-            public void onAdClicked(Ad ad) {
-
-            }
-
-            @Override
-            public void onLoggingImpression(Ad ad) {
-
-            }
-        });
-
-        interstitialAd.loadAd();
     }
 
-    @Override
-    protected void onDestroy() {
-        if (interstitialAd != null) {
-            interstitialAd.destroy();
-        }
-        super.onDestroy();
-    }
 
     private void initNavDrawerToggel() {
         toolbar = findViewById(R.id.toolbar);
@@ -111,11 +68,7 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onPageSelected(int position) {
-                Random rad = new Random();
-                int i = rad.nextInt(10);
-                if (i < 4 && interstitialAd.isAdLoaded()) {
-                    interstitialAd.show();
-                }
+
             }
 
             @Override
@@ -133,6 +86,28 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if (viewPager.getCurrentItem() == 0) {
+            if (doubleBackToExitPressedOnce) {
+                super.onBackPressed();
+                return;
+            }
+
+            doubleBackToExitPressedOnce = true;
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+            new Handler().postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        } else {
+            viewPager.setCurrentItem(viewPager.getCurrentItem() - 1);
+        }
+    }
 
     private void callInstagram() {
         String apppackage = "com.instagram.android";

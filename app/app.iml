@@ -173,5 +173,6 @@
     <orderEntry type="library" name="Gradle: com.github.lzyzsd:circleprogress-1.2.1" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.core:common:1.1.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.exoplayer:exoplayer-core-r2.4.2" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.kobakei:ratethisapp-1.2.0" level="project" />
   </component>
 </module>
