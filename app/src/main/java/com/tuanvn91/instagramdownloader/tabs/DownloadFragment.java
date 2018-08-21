@@ -360,36 +360,36 @@ public class DownloadFragment extends Fragment {
         });
 
 
-        final ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-        clipboard.addPrimaryClipChangedListener(
-                new ClipboardManager.OnPrimaryClipChangedListener() {
-                    public void onPrimaryClipChanged() {
-                        String a = clipboard.getText().toString();
-                        Toast.makeText(mContext, "Copied", Toast.LENGTH_SHORT).show();
-
-                        //if(mPreviousText.equals(a)) {
-                        //	return;
-                        //}else {
-
-                        //File direct = new File(Environment.getExternalStorageDirectory() + "/InstantInsta.mp4");
-
-                        if (!dbcon.isURLPresent(a)) {
-
-                            if (checkURL(a)) {
-                                Handler handler = new Handler();
-                                imageDownloadReceiver imageDownloadReceiver = new imageDownloadReceiver(handler);
-                                FileDownloaderService.startAction(mContext, a, imageDownloadReceiver);
-                                //mService.downloadAsynFile(a);
-                                //mPreviousText = a;
-                            }
-                        } else {
-                            Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
-                            ((MainActivity) activity).viewPager.setCurrentItem(1, true);
-                        }
-                        //}
-                    }
-                }
-        );
+//        final ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+//        clipboard.addPrimaryClipChangedListener(
+//                new ClipboardManager.OnPrimaryClipChangedListener() {
+//                    public void onPrimaryClipChanged() {
+//                        String a = clipboard.getText().toString();
+//                        Toast.makeText(mContext, "Copied", Toast.LENGTH_SHORT).show();
+//
+//                        //if(mPreviousText.equals(a)) {
+//                        //	return;
+//                        //}else {
+//
+//                        //File direct = new File(Environment.getExternalStorageDirectory() + "/InstantInsta.mp4");
+//
+//                        if (!dbcon.isURLPresent(a)) {
+//
+//                            if (checkURL(a)) {
+//                                Handler handler = new Handler();
+//                                imageDownloadReceiver imageDownloadReceiver = new imageDownloadReceiver(handler);
+//                                FileDownloaderService.startAction(mContext, a, imageDownloadReceiver);
+//                                //mService.downloadAsynFile(a);
+//                                //mPreviousText = a;
+//                            }
+//                        } else {
+//                            Toast.makeText(mContext, "Post Already Downloaded", Toast.LENGTH_SHORT).show();
+//                            ((MainActivity) activity).viewPager.setCurrentItem(1, true);
+//                        }
+//                        //}
+//                    }
+//                }
+//        );
 
         return rootView;
     }
