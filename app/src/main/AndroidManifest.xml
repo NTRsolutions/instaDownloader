@@ -5,6 +5,8 @@
   <uses-permission android:name="android.permission.INTERNET"/>
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission
+      android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
 
   <uses-feature
       android:name="android.hardware.faketouch"
@@ -13,11 +15,12 @@
   <application
       android:name=".AppApplication"
       android:allowBackup="true"
-      android:icon="@mipmap/icon512_insta"
+      android:icon="@mipmap/ic_launcher"
       android:label="@string/app_name"
       android:supportsRtl="true"
       android:theme="@style/AppTheme">
-    <activity android:name=".MainActivity">
+    <activity android:name=".MainActivity"
+        android:exported="true">
 
     </activity>
 
@@ -37,7 +40,8 @@
         android:theme="@style/AppTheme.NoActionBar">
     </activity>
 
-    <activity android:name=".ShowAds" />
+    <activity android:name=".ShowAds"
+        android:theme="@style/AppTheme.NoActionBar"/>
 
     <service android:name=".service.DownloadService"/>
     <service android:name=".service.FileDownloaderService"/>
@@ -49,15 +53,19 @@
     <activity android:name=".SplashScreenActivity"
         android:theme="@style/AppTheme.NoActionBar"
         >
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
     </activity>
+    <activity-alias android:name=".MAIN1"
+        android:targetActivity=".SplashScreenActivity"
+        >
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity-alias>
+
     <activity
         android:name="com.google.android.gms.ads.AdActivity"
-        android:noHistory="true"></activity>
+       ></activity>
   </application>
 
 </manifest>

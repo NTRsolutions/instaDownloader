@@ -1,6 +1,7 @@
 package com.tuanvn91.instagramdownloader;
 
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
@@ -12,36 +13,41 @@ import android.support.v7.app.AppCompatActivity;
 
 public class ShowAds extends AppCompatActivity {
     private static ShowAds instance;
-    private int countResume = 0;
-
     public static ShowAds getInstance() {
         return instance;
     }
+    private int countResume = 0;
+    private ProgressDialog dialogLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Wellcome");
-        try {
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.about);
+        try
+        {
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.ytinfo);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 setTaskDescription(new ActivityManager.TaskDescription("", bitmap,
-                        ContextCompat.getColor(getApplicationContext(), R.color.tuan)));
+                        ContextCompat.getColor(getApplicationContext(), R.color.colorTextPrimary)));
 
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.colorTextPrimary)));
-        } catch (Exception e) {
+            dialogLoading = new ProgressDialog(this); // this = YourActivity
+            dialogLoading.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialogLoading.setIndeterminate(true);
+            dialogLoading.setCanceledOnTouchOutside(false);
+            dialogLoading.show();
         }
+        catch (Exception e){}
 
         if (instance == null)
             instance = this;
     }
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
         // put your code here...
         countResume++;
-        if (countResume >= 2) {
+        if(countResume >= 2)
+        {
             try {
                 if (Build.VERSION.SDK_INT < 21) {
                     finishAffinity();

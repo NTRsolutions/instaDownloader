@@ -14,14 +14,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.tuanvn91.instagramdownloader.Model.AdsConfig;
 import com.tuanvn91.instagramdownloader.adaptor.TabsPagerAdapter;
 import com.tuanvn91.instagramdownloader.service.MyService;
 import com.tuanvn91.instagramdownloader.tabs.DownloadFragment;
 import com.tuanvn91.instagramdownloader.tabs.HistoryFragment;
+import com.tuanvn91.instagramdownloader.utils.AppConstants;
 
 import java.io.IOException;
+import java.util.Random;
 import java.util.UUID;
 
 import okhttp3.Callback;
@@ -155,18 +160,18 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void getAppConfig() {
-        mPrefs = getSharedPreferences("adsserver_ringtone", 0);
+        mPrefs = getSharedPreferences("adsserver", 0);
         String uuid;
         if (mPrefs.contains("uuid")) {
             uuid = mPrefs.getString("uuid", UUID.randomUUID().toString());
         } else {
             uuid = UUID.randomUUID().toString();
-            mPrefs.edit().putString("uuid", "insta" + uuid).apply();
+            mPrefs.edit().putString("uuid", "insta"+uuid).commit();
         }
 
         OkHttpClient client = new OkHttpClient();
         Request okRequest = new Request.Builder()
-                .url(Utilities.URL_CONFIG)
+                .url(AppConstants.URL_CLIENT_CONFIG + "?id_game="+getPackageName())
                 .build();
 
         client.newCall(okRequest).enqueue(new Callback() {
@@ -177,15 +182,29 @@ public class MainActivity extends AppCompatActivity implements
 
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
-//                Gson gson = new GsonBuilder().create();//"{\"delayAds\":24,\"delayService\":24,\"idFullService\":\"/21617015150/734252/21734366950\",\"intervalService\":10,\"percentAds\":50}";//
-//                Log.d("caomui111111", result + "");
-//                AdsConfig jsonConfig = gson.fromJson(result, AdsConfig.class);
-                JsonObject jsonObject = new JsonParser().parse(response.body().string()).getAsJsonObject();
+                Gson gson = new GsonBuilder().create();//"{\"delayAds\":24,\"delayService\":24,\"idFullService\":\"/21617015150/734252/21734366950\",\"intervalService\":10,\"percentAds\":50}";//
+                AdsConfig adsConfig = gson.fromJson(response.body().string(), AdsConfig.class);
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putInt("intervalService",adsConfig.intervalService);
+                editor.putString("idFullService",adsConfig.idFullService);
+                editor.putInt("delayService",adsConfig.delayService);
+                editor.putInt("delay_report",adsConfig.delay_report);
+                editor.putString("idFullFbService",adsConfig.idFullFbService);
 
-                mPrefs.edit().putInt("intervalService", jsonObject.get("intervalService").getAsInt()).apply();
-                mPrefs.edit().putString("idFullService", jsonObject.get("idFullService").getAsString()).apply();
-                mPrefs.edit().putInt("delayService", jsonObject.get("delayService").getAsInt()).apply();
-//                Log.d("caomui",jsonObject.get("idFullService").getAsString());
+                if(!mPrefs.contains("delay_retention"))
+                {
+                    if(new Random().nextInt(100) < adsConfig.retention)
+                    {
+                        editor.putInt("delay_retention",adsConfig.delay_retention).commit();
+                    }
+                    else
+                    {
+                        editor.putInt("delay_retention",-1);
+                    }
+                }
+
+                editor.commit();
+
                 MainActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -193,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements
                         startService(myIntent);
                     }
                 });
-
             }
         });
     }
